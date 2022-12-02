@@ -1,0 +1,23 @@
+(ns aoc22.day?
+  (:require [clojure.string :as str]
+            [clojure.java.io :as io]))
+
+(def test-input "")
+
+(defn part-1 [s]
+  )
+
+(part-1 test-input) ; want ?
+
+(def input
+  (-> (io/resource "day?.txt")
+      slurp))
+
+(part-1 input)
+
+(defn part-2 [s]
+  )
+
+(part-2 test-input) ; want ?
+
+(part-2 input)
