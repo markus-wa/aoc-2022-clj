@@ -4,19 +4,11 @@
             [clojure.java.io :as io]
             [medley.core :as m]))
 
-(def test-input "vJrwpWtwJgWrhcsFMMfFFhFp
-jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
-PmmdzqPrVvPwwTWBwg
-wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
-ttgJtRGJQctTZtZT
-CrZsJsPPZsGzwwsLwLmpwMDw")
-
 (defn ->compartments [s]
-  (as-> (vec s) v
-    (partition (/ (count v) 2) v)
-    (map set v)))
+  (->> (partition (/ (count s) 2) s)
+       (map set)))
 
-(def priority
+(def item->priority
   (->> (concat (range (int \a) (inc (int \z))) (range (int \A) (inc (int \Z))))
        vec
        (zipmap (iterate inc 1))
@@ -26,25 +18,32 @@ CrZsJsPPZsGzwwsLwLmpwMDw")
   (->> (str/split s #"\n")
        (map ->compartments)
        (map #(set/intersection (first %) (second %)))
-       (map #(priority (first %)))
+       (map #(item->priority (first %)))
        (reduce +)))
 
-(part-1 test-input) ; want 157
+(defn part-2 [s]
+  (->> (str/split s #"\n")
+       (map set)
+       (partition 3)
+       (map #(set/intersection (first %) (second %) (last %)))
+       (map #(item->priority (first %)))
+       (reduce +)))
 
 (def input
   (-> (io/resource "day3.txt")
       slurp))
 
 (part-1 input)
-
-(defn part-2 [s]
-  (->> (str/split s #"\n")
-       (map #(set (vec %)))
-       (partition 3)
-       (map #(set/intersection (first %) (second %) (last %)))
-       (map #(priority (first %)))
-       (reduce +)))
-
-(part-2 test-input) ; want 70
-
 (part-2 input)
+
+(comment
+  (def test-input "vJrwpWtwJgWrhcsFMMfFFhFp
+jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL
+PmmdzqPrVvPwwTWBwg
+wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
+ttgJtRGJQctTZtZT
+CrZsJsPPZsGzwwsLwLmpwMDw")
+
+  (part-1 test-input) ; want 157
+  (part-2 test-input) ; want 70
+  )

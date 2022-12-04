@@ -1,50 +1,32 @@
 (ns aoc22.day4
   (:require [clojure.string :as str]
-            [clojure.set :as set]
             [clojure.java.io :as io]))
 
-(def test-input "2-4,6-8
+(defn ->pair [s]
+  (->> (re-find #"(\d+)-(\d+),(\d+)-(\d+)" s)
+       rest
+       (map read-string)))
+
+(defn run [s]
+  (let [pairs
+        (->> (str/split s #"\n")
+             (map ->pair))]
+    [(count (filter (fn [[a b x y]] (<= (* (- a x) (- b y)) 0)) pairs))
+     (count (filter (fn [[a b x y]] (<= (* (- y a) (- x b)) 0)) pairs))]))
+
+(def input
+  (-> (io/resource "day4.txt")
+      slurp))
+
+(run input)
+
+(comment
+  (def test-input "2-4,6-8
 2-3,4-5
 5-7,7-9
 2-8,3-7
 6-6,4-6
 2-6,4-8")
 
-(defn ->pair [s]
-  (let [[[a b] [x y]]
-        (->> (str/split s #",")
-             (map #(map read-string (str/split % #"-"))))]
-    [(set (range a (inc b)))
-     (set (range x (inc y)))]))
-
-(defn part-1 [s]
-  (->> (str/split s #"\n")
-       (map ->pair)
-       (map (fn [[ab xy]]
-              (let [intersect (set/intersection ab xy)]
-                (if (or (= intersect ab)
-                        (= intersect xy))
-                  1
-                  0))))
-       (reduce +)))
-
-(part-1 test-input) ; want 2
-
-(def input
-  (-> (io/resource "day4.txt")
-      slurp))
-
-(part-1 input)
-
-(defn part-2 [s]
-  (->> (str/split s #"\n")
-       (map ->pair)
-       (map (fn [[ab xy]]
-              (if (not-empty (set/intersection ab xy))
-                1
-                0)))
-       (reduce +)))
-
-(part-2 test-input) ; want 4
-
-(part-2 input)
+  (run test-input) ;; want [2 4]
+  )
