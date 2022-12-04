@@ -16,9 +16,7 @@
     [(reduce max elves)
      (reduce + (take-last 3 (sort elves)))]))
 
-(def input (slurp (io/resource "day1.txt")))
-
-(run input)
+(run (slurp (io/resource "day1.txt")))
 
 (comment
   (def test-input "1000

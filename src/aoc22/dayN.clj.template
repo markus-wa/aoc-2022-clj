@@ -11,9 +11,7 @@
 
 (part-1 test-input) ; want ?
 
-(def input
-  (-> (io/resource "day?.txt")
-      slurp))
+(def input (slurp (io/resource "day?.txt")))
 
 (part-1 input)
 

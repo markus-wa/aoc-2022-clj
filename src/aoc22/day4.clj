@@ -8,17 +8,12 @@
        (map read-string)))
 
 (defn run [s]
-  (let [pairs
-        (->> (str/split s #"\n")
-             (map ->pair))]
+  (let [pairs (->> (str/split-lines s)
+                   (map ->pair))]
     [(count (filter (fn [[a b x y]] (<= (* (- a x) (- b y)) 0)) pairs))
      (count (filter (fn [[a b x y]] (<= (* (- y a) (- x b)) 0)) pairs))]))
 
-(def input
-  (-> (io/resource "day4.txt")
-      slurp))
-
-(run input)
+(run (slurp (io/resource "day4.txt")))
 
 (comment
   (def test-input "2-4,6-8

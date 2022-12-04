@@ -15,23 +15,21 @@
        (m/map-kv (fn [k v] [(char v) k]))))
 
 (defn part-1 [s]
-  (->> (str/split s #"\n")
+  (->> (str/split-lines s)
        (map ->compartments)
        (map #(set/intersection (first %) (second %)))
        (map #(item->priority (first %)))
        (reduce +)))
 
 (defn part-2 [s]
-  (->> (str/split s #"\n")
+  (->> (str/split-lines s)
        (map set)
        (partition 3)
        (map #(set/intersection (first %) (second %) (last %)))
        (map #(item->priority (first %)))
        (reduce +)))
 
-(def input
-  (-> (io/resource "day3.txt")
-      slurp))
+(def input (slurp (io/resource "day3.txt")))
 
 (part-1 input)
 (part-2 input)
