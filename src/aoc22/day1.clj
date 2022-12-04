@@ -3,7 +3,7 @@
             [clojure.java.io :as io]))
 
 (defn ->elf [s]
-  (->> (str/split s #"\n")
+  (->> (str/split-lines s)
        (map #(Integer/parseInt %))
        (reduce +)))
 
@@ -13,16 +13,12 @@
 
 (defn run [s]
   (let [elves (->elves s)]
-    [(apply max elves)
-     (->> (sort elves)
-          (take-last 3)
-          (reduce +))]))
+    [(reduce max elves)
+     (reduce + (take-last 3 (sort elves)))]))
 
-(def input
-  (-> (io/resource "day1.txt")
-      slurp))
+(def input (slurp (io/resource "day1.txt")))
 
-(println "results:" (run input))
+(run input)
 
 (comment
   (def test-input "1000
