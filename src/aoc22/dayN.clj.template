@@ -1,6 +1,8 @@
 (ns aoc22.day?
   (:require [clojure.string :as str]
-            [clojure.java.io :as io]))
+            [clojure.set :as set]
+            [clojure.java.io :as io]
+            [medley.core :as m]))
 
 (def test-input "")
 
